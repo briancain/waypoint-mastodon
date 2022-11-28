@@ -16,6 +16,15 @@ app "mastodon" {
   }
   deploy {
     use "helm" {
+      name  = app.name
+      chart = "${path.app}/chart"
+
+      // We use a values file so we can set the entrypoint environment
+      // variables into a rich YAML structure. This is easier than --set
+      values = [
+        file(templatefile("${path.app}/values.yaml.tpl")),
+      ]
+
     }
   }
   release {
